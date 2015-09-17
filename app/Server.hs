@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Main where
 
 import           Control.Monad
@@ -9,10 +11,11 @@ import Lib
 main :: IO ()
 main = Z.runZMQ $ do
     s <- Z.socket Z.Sub
-    Z.bind s "127.0.0.1:4000"
+    Z.subscribe s ""
+    Z.bind s "tcp://127.0.0.1:4000"
 
     p <- Z.socket Z.Pub
-    Z.bind p "127.0.0.1:4001"
+    Z.bind p "tcp://127.0.0.1:4001"
 
     forever $
         Z.receive s >>= Z.send p []
